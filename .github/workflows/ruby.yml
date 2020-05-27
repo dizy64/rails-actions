@@ -34,3 +34,8 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v1
+      with:
+        name: rspec-result
+        path: rspec_result.xml
