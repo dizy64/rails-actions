@@ -17,7 +17,7 @@ on:
       - master
       - develop
 jobs:
-  test:
+  rspec:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -43,3 +43,25 @@ jobs:
       with:
         name: rspec-result
         path: rspec_result.xml
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.0
+    - name: cache
+      uses: actions/cache@v2
+      with:
+       path: vendor/bundle
+       key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+       restore-keys: |
+         ${{ runner.os }}-gems-
+    - name: Install dependencies
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    - name: Run tests
+      run: bundle exec rubocop 
+
