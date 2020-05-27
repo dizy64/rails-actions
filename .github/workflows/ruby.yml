@@ -33,7 +33,8 @@ jobs:
     - name: Install dependencies
       run: bundle install
     - name: Run tests
-      run: bundle exec rspec
+      run: bundle exec rspec --format RspecJunitFormatter \
+                              --out rspec_result.xml
     - name: Archive code coverage results
       uses: actions/upload-artifact@v1
       with:
